@@ -1,0 +1,425 @@
+generator client {
+    provider        = "prisma-client-js"
+    output          = "../node_modules/@prisma/ju/"
+    previewFeatures = ["views"]
+}
+
+datasource db {
+    provider = "sqlserver"
+    url      = env("DATABASE_URL_JU")
+}
+
+model VW_ASSOCIADOS_ATIVOS {
+    associado       Int       @id
+    digito          Int?
+    sequencia       Int
+    descrTipo       String    @db.VarChar(255)
+    situacao        Int       @default(1)
+    ativo           String    @default("S") @db.VarChar(1)
+    nome            String    @db.VarChar(255)
+    cep             String?   @db.VarChar(8)
+    endereco        String?   @db.VarChar(255)
+    numero          Int?
+    complemento     String?   @db.VarChar(255)
+    bairro          String?   @db.VarChar(255)
+    municipio       String?   @db.VarChar(255)
+    uf              String?   @db.VarChar(2)
+    email           String?   @db.VarChar(255)
+    profissao       String?   @db.VarChar(255)
+    descprofissao   String?   @db.VarChar(255)
+    dtnascimento    DateTime
+    cpf             String    @db.VarChar(11)
+    identidade      String?   @db.VarChar(20)
+    tipoidentidade  String?   @db.VarChar(255)
+    sexo            String    @db.VarChar(1)
+    estadocivil     Int?
+    bloqretiradas   String    @db.VarChar(1)
+    observacoes     String?   @db.VarChar(255)
+    diavencimento   Int?
+    dtisento        DateTime?
+    percdescservico Decimal
+    categoria       Int?
+    excluido        String    @db.VarChar(1)
+    parentesco      Int?
+}
+
+model VW_ASSOCIADOS_TELEFONES {
+    tel_idtelefone Int     @id @default(autoincrement())
+    tel_associado  Int
+    tel_sequencia  Int
+    tel_tipo       String  @db.VarChar(255)
+    tel_ddd        String  @db.VarChar(2)
+    tel_numero     String  @db.VarChar(9)
+    tel_ramal      String? @db.VarChar(4)
+}
+
+model VW_BOLETOS {
+    ass_associado           Int       @id
+    ass_ativo               String    @default("S") @db.VarChar(1)
+    ass_digito              Int       @default(1)
+    ass_nome                String
+    ass_cpf                 String    @db.VarChar(15)
+    ass_tipoidentidade      String
+    ass_identidade          String
+    ass_cep                 String
+    ass_endereco            String
+    ass_numero              Int
+    ass_complemento         String
+    ass_bairro              String
+    ass_municipio           String
+    ass_uf                  String
+    ass_cepcobranca         String?
+    ass_enderecocobranca    String?
+    ass_numerocobranca      String?
+    ass_complementocobranca String?
+    ass_bairrocobranca      String?
+    ass_municipiocobranca   String?
+    ass_ufcobranca          String?
+    cor_senha               String?
+    ass_receberboleto       String    @default("N")
+    ass_email               String
+    cat_descricao           String
+    deb_codcontr            Int
+    deb_sequencia           Int
+    ser_servico             String
+    ser_descricao           String
+    deb_dtreferencia        DateTime
+    deb_dtvencimento        DateTime
+    deb_dtpagamento         DateTime?
+    deb_descricao           String
+    deb_vlrparcela          String
+    deb_vlrpagamento        String
+    deb_nossonumero         String?
+    deb_dtinicial           String?
+    deb_dtfinal             String?
+    deb_dtgeracaoboleto     String?
+    deb_seqrem              String?
+    deb_vlrdescontos        String
+    par_percjurosdiarios    String
+    par_percmulta           String
+    par_diasmulta           String
+    par_vljuros             String
+    par_vlmulta             String
+    par_valortotal          String
+    bar_codcontr            String?
+    bar_codbarra            String?
+    bar_linhadigitavel      String?
+}
+
+model VW_CATEGORIAS {
+    cat_categoria      Int     @id
+    cat_descricao      String  @db.VarChar(255)
+    cat_abreviatura    String  @db.VarChar(255)
+    cat_valor          Decimal
+    cat_diavencimento  Int?
+    cat_emitirboleto   String  @default("N") @db.VarChar(1)
+    cat_gerardebito    String  @default("N") @db.VarChar(1)
+    cat_gerarjaneiro   String  @default("N") @db.VarChar(1)
+    cat_gerarfevereiro String  @default("N") @db.VarChar(1)
+    cat_gerarmarco     String  @default("N") @db.VarChar(1)
+    cat_gerarabril     String  @default("N") @db.VarChar(1)
+    cat_gerarmaio      String  @default("N") @db.VarChar(1)
+    cat_gerarjunho     String  @default("N") @db.VarChar(1)
+    cat_gerarjulho     String  @default("N") @db.VarChar(1)
+    cat_geraragosto    String  @default("N") @db.VarChar(1)
+    cat_gerarsetembro  String  @default("N") @db.VarChar(1)
+    cat_geraroutubro   String  @default("N") @db.VarChar(1)
+    cat_gerarnovembro  String  @default("N") @db.VarChar(1)
+    cat_gerardezembro  String  @default("N") @db.VarChar(1)
+}
+
+model VW_CHAMADAS {
+    associado       Int    @id
+    sequencia       Int
+    nome            String
+    descrTipo       String
+    uti_servico     Int
+    ser_descricao   String
+    hor_idhorario   Int
+    hor_diadasemana Int
+    hor_horainicial String
+    hor_horafinal   String
+    Compareceu      String
+    JustFalta       String
+}
+
+model VW_CLASSIFICACOES {
+    cla_classificacao Int    @id
+    cla_descricao     String @db.VarChar(255)
+}
+
+model VW_COBRANCAS {
+    cor_associado Int @id @unique
+    cor_sequencia Int
+    cor_cobrador  Int
+}
+
+model VW_DIREITO_IMAGEM {
+    associado       Int       @id
+    sequencia       Int
+    direitoimagem   String
+    dtdireitoimagem DateTime?
+}
+
+model VW_EVENTOS {
+    eve_idevento             Int      @id
+    eve_local                String   @db.VarChar(255)
+    eve_dtinicial            DateTime
+    eve_dtfinal              DateTime
+    eve_nome                 String   @db.VarChar(255)
+    eve_idatividade          Int
+    eve_responsavel          String   @db.VarChar(255)
+    eve_qteprevparticipantes Int
+    eve_qteprevnsocios       Int
+    eve_qteefetparticipantes Int
+    eve_qteefetnsocios       Int
+    eve_idadeinicial         Int
+    eve_idadefinal           Int
+    eve_vlrcusto             Int
+    eve_vlrcustoNsocio       Int
+    eve_patrocinadores       String   @db.VarChar(255)
+    eve_observacao           String   @db.VarChar(255)
+}
+
+model VW_EXTRATO {
+    deb_associado     Int       @id
+    deb_descricao     String
+    deb_dtvencimento  DateTime
+    deb_dtpagamento   DateTime?
+    deb_vlrparcela    Decimal
+    deb_vlrpagamento  Decimal?
+    deb_vlrdescontos  Decimal?
+    deb_vlrjuros      Decimal?
+    deb_vlrmulta      Decimal?
+    deb_vlracrescimos Decimal?
+}
+
+model VW_FINALIDADES {
+    fin_idfinalidade   Int    @id
+    fin_descricao      String @db.VarChar(255)
+    fin_horainicial    String
+    fin_horafinal      String
+    fin_nsegurancas    Int
+    fin_alterarhorario String
+}
+
+model VW_HORARIOS {
+    hor_idhorario   Int    @id
+    hor_servico     Int
+    hor_diadasemana Int
+    hor_horainicial String
+    hor_horafinal   String
+    hor_capacidade  Int
+    hor_feriado     String
+    hor_ativo       String
+}
+
+model VW_LOCACOES {
+    loc_idlocacao      Int      @id
+    loc_associado      Int
+    loc_sequencia      Int
+    loc_idnsocio       Int
+    loc_local          Int
+    loc_servico        Int
+    loc_dtlocacao      DateTime
+    loc_dtevento       DateTime
+    loc_diasantes      Int
+    loc_diasdepois     Int
+    loc_nrconvidados   Int
+    loc_nrsegurancas   Int
+    loc_capacidade     Int
+    loc_vlrAluguel     Decimal
+    loc_vlrAcrescido   Decimal
+    loc_vlrTotal       Decimal
+    loc_usuario        String
+    loc_idfinalidade   Int
+    loc_horainicial    String
+    loc_horafinal      String
+    loc_observacao     String
+    loc_geroudeb       String
+    loc_situacao       String
+    loc_vlrDesconto    Decimal
+    loc_liberado       String
+    loc_dtLiberacao    DateTime
+    loc_usuarioliberou String
+}
+
+model VW_LOCAIS {
+    loc_local            Int       @id @default(autoincrement())
+    loc_descricao        String    @db.VarChar(255)
+    loc_abreviatura      String    @db.VarChar(255)
+    loc_idbanco          Int?
+    loc_locavel          String    @db.VarChar(1)
+    loc_vlraluguel       Decimal
+    loc_idatividade      Int?
+    loc_portaria         String    @db.VarChar(1)
+    loc_quadra           String    @db.VarChar(1)
+    loc_testarexames     String    @db.VarChar(1)
+    loc_idadeinicial     Int?
+    loc_idadefinal       Int?
+    loc_mensalidade      String    @default("N") @db.VarChar(1)
+    loc_controleacesso   String    @db.VarChar(1)
+    loc_sede             String    @db.VarChar(1)
+    loc_servico          Int?
+    loc_capacidade       Int?
+    loc_vlraluguelNsocio Decimal
+    loc_percdesc         Decimal
+    loc_bloqini          DateTime?
+    loc_bloqfim          DateTime?
+}
+
+model VW_NEWSLETTER {
+    Matricula      Int      @id
+    Nome           String
+    Ativo          String
+    DataNascimento DateTime
+    Idade          Int
+    Sexo           String
+    EstadoCivil    String
+    Profissao      String
+    Email          String
+    Servico        String
+    Dependentes    Int
+}
+
+model VW_PRECOS {
+    pre_idprecos    Int             @id @default(autoincrement())
+    pre_servico     Int
+    pre_vezes       Int
+    pre_valor       Decimal
+    pre_valorNsocio Decimal
+    VW_UTILIZACOES  VW_UTILIZACOES?
+
+    @@unique([pre_servico, pre_vezes])
+}
+
+model VW_PREFERENCIAS {
+    pre_idpreferencia Int      @id @default(autoincrement())
+    pre_associado     Int
+    pre_sequencia     Int
+    pre_dtlancamento  DateTime
+    pre_usuario       String
+    pre_idatividade   Int
+    pre_observacao    String
+    pre_observacao1   String
+}
+
+model VW_RESERVAS_QUADRAS {
+    qua_idquadra        Int      @id @default(autoincrement())
+    qua_associado       Int
+    qua_sequencia       Int
+    qua_dtlancamento    DateTime
+    qua_local           Int
+    qua_servico         Int
+    qua_dtreserva       DateTime
+    qua_idhorario       Int
+    qua_qtetickets      Int
+    qua_vlrquadra       Decimal
+    qua_vlrtotal        Decimal
+    qua_vlriluminacao   Decimal
+    qua_compareceu      String
+    qua_cancelada       String
+    qua_usuariocancelou String
+    qua_gerardebito     String
+    qua_taxailuminacao  Decimal
+    qua_pagtickets      String
+    qua_excluido        String
+    qua_usuarioexcluiu  String
+    qua_descricao       String
+    qua_assreserva      String
+}
+
+model VW_RESERVA_SERVICOS {
+    rsp_idreserva    Int      @id @default(autoincrement())
+    rsp_associado    Int
+    rsp_sequencia    Int
+    rsp_servico      Int
+    rsp_idhorario    Int
+    rsp_dtreserva    DateTime
+    rsp_dtlancamento DateTime
+    rsp_usuario      String
+    rsp_senha        String
+}
+
+model VW_RETIRADAS {
+    ret_idretirada   Int      @id @default(autoincrement())
+    ret_idevento     Int
+    ret_associado    Int
+    ret_sequencia    Int
+    ret_dtlancamento DateTime
+    ret_quantidade   Int
+    ret_qtensocio    Int
+    ret_local        Int
+    ret_usuario      String
+    ret_observacao   String
+    ret_codbarras    String
+    ret_coduti       String
+}
+
+model VW_SERVICOS {
+    ser_servico                Int             @id @default(autoincrement())
+    ser_descricao              String          @db.VarChar(255)
+    ser_abreviatura            String          @db.VarChar(255)
+    ser_classificacao          Int
+    ser_idmaterial             Int?
+    ser_dtultgeracaodebito     DateTime?
+    ser_departamento           Int?
+    ser_diavencimento          Int?            @default(10)
+    ser_servicocontrolador     Int?
+    ser_bloqatraso             String          @default("N") @db.VarChar(1)
+    ser_diasbloqatraso         Int?
+    ser_gerardebito            String          @default("N") @db.VarChar(1)
+    ser_idatividade            Int?
+    ser_ativo                  String          @default("S") @db.VarChar(1)
+    ser_agrupcontabil          String          @default("Não Contábeis") @db.VarChar(255)
+    ser_gerarisencao           String          @default("N") @db.VarChar(1)
+    ser_considerarparadesconto String          @default("N") @db.VarChar(1)
+    ser_controlaracesso        String          @default("N") @db.VarChar(1)
+    ser_verificalista          String          @default("N") @db.VarChar(1)
+    ser_imprimesenha           String          @default("N") @db.VarChar(1)
+    ser_idadeini               Int?
+    ser_idadefim               Int?
+    ser_permitecontratacao     String          @default("N") @db.VarChar(1)
+    VW_UTILIZACOES             VW_UTILIZACOES?
+}
+
+model VW_USUARIOS {
+    usuario String @id @db.VarChar(255)
+}
+
+model VW_UTILIZACOES {
+    uti_idutilizacao        Int                      @id @unique @default(autoincrement())
+    uti_associado           Int
+    uti_sequencia           Int
+    uti_servico             Int                      @unique
+    uti_modalidade          Int
+    uti_vezes               Int
+    uti_dtlancamento        DateTime
+    uti_ativo               String
+    uti_dtinicial           DateTime
+    uti_dtfinal             DateTime
+    uti_cancelado           String
+    uti_motivo              String
+    uti_dtcancelamento      DateTime
+    uti_usuariocancelou     String
+    uti_observacao          String
+    uti_isentodebito        String
+    uti_perccons            Decimal
+    VW_SERVICOS             VW_SERVICOS?             @relation(fields: [uti_servico], references: [ser_servico], map: "like_servicos")
+    VW_PRECOS               VW_PRECOS?               @relation(fields: [uti_servico, uti_vezes], references: [pre_servico, pre_vezes], map: "like_precos")
+    VW_UTILIZACOES_HORARIOS VW_UTILIZACOES_HORARIOS? @relation(fields: [uti_idutilizacao], references: [uth_idutilizacao])
+
+    @@unique([uti_servico, uti_vezes], name: "relation_price")
+}
+
+model VW_UTILIZACOES_HORARIOS {
+    uth_idutilizacaohorario Int              @id @default(autoincrement())
+    uth_idutilizacao        Int              @unique
+    VW_UTILIZACOES          VW_UTILIZACOES[]
+}
+
+model VW_VACINACAO {
+    associado         Int    @id
+    sequencia         Int
+    carteiravacinacao String
+}
