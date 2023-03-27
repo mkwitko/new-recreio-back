@@ -1,3 +1,4 @@
+import { AssociadosModule } from './../../ju/associados_ativos/associados.module';
 import { UsersModule } from './../users/users.module';
 import { SessionModule } from './../session/session.module';
 import { SessionSerializer } from './Passport/Session/session.serializer';
@@ -14,6 +15,7 @@ import { ValidationService } from './helper/validation/validation.service';
     PrismaModule,
     SessionModule,
     UsersModule,
+    AssociadosModule,
     PassportModule.register({
       session: true,
     }),

@@ -10,37 +10,40 @@ datasource db {
 }
 
 model VW_ASSOCIADOS_ATIVOS {
-    associado       Int       @id
-    digito          Int?
-    sequencia       Int
-    descrTipo       String    @db.VarChar(255)
-    situacao        Int       @default(1)
-    ativo           String    @default("S") @db.VarChar(1)
-    nome            String    @db.VarChar(255)
-    cep             String?   @db.VarChar(8)
-    endereco        String?   @db.VarChar(255)
-    numero          Int?
-    complemento     String?   @db.VarChar(255)
-    bairro          String?   @db.VarChar(255)
-    municipio       String?   @db.VarChar(255)
-    uf              String?   @db.VarChar(2)
-    email           String?   @db.VarChar(255)
-    profissao       String?   @db.VarChar(255)
-    descprofissao   String?   @db.VarChar(255)
-    dtnascimento    DateTime
-    cpf             String    @db.VarChar(11)
-    identidade      String?   @db.VarChar(20)
-    tipoidentidade  String?   @db.VarChar(255)
-    sexo            String    @db.VarChar(1)
-    estadocivil     Int?
-    bloqretiradas   String    @db.VarChar(1)
-    observacoes     String?   @db.VarChar(255)
-    diavencimento   Int?
-    dtisento        DateTime?
-    percdescservico Decimal
-    categoria       Int?
-    excluido        String    @db.VarChar(1)
-    parentesco      Int?
+    associado               Int                       @id
+    digito                  Int?
+    sequencia               Int
+    descrTipo               String                    @db.VarChar(255)
+    situacao                Int                       @default(1)
+    ativo                   String                    @default("S") @db.VarChar(1)
+    nome                    String                    @db.VarChar(255)
+    cep                     String?                   @db.VarChar(8)
+    endereco                String?                   @db.VarChar(255)
+    numero                  Int?
+    complemento             String?                   @db.VarChar(255)
+    bairro                  String?                   @db.VarChar(255)
+    municipio               String?                   @db.VarChar(255)
+    uf                      String?                   @db.VarChar(2)
+    email                   String?                   @db.VarChar(255)
+    profissao               String?                   @db.VarChar(255)
+    descprofissao           String?                   @db.VarChar(255)
+    dtnascimento            DateTime
+    cpf                     String?                   @db.VarChar(11)
+    identidade              String?                   @db.VarChar(20)
+    tipoidentidade          String?                   @db.VarChar(255)
+    sexo                    String                    @db.VarChar(1)
+    estadocivil             Int?
+    bloqretiradas           String                    @db.VarChar(1)
+    observacoes             String?                   @db.VarChar(255)
+    diavencimento           Int?
+    dtisento                DateTime?
+    percdescservico         Int
+    categoria               Int?
+    excluido                String                    @db.VarChar(1)
+    parentesco              Int?
+    VW_ASSOCIADOS_TELEFONES VW_ASSOCIADOS_TELEFONES[]
+
+    @@unique([associado, sequencia])
 }
 
 model VW_ASSOCIADOS_TELEFONES {
@@ -51,6 +54,8 @@ model VW_ASSOCIADOS_TELEFONES {
     tel_ddd        String  @db.VarChar(2)
     tel_numero     String  @db.VarChar(9)
     tel_ramal      String? @db.VarChar(4)
+
+    VW_ASSOCIADOS_ATIVOS VW_ASSOCIADOS_ATIVOS? @relation(fields: [tel_associado, tel_sequencia], references: [associado, sequencia])
 }
 
 model VW_BOLETOS {
@@ -107,25 +112,25 @@ model VW_BOLETOS {
 }
 
 model VW_CATEGORIAS {
-    cat_categoria      Int     @id
-    cat_descricao      String  @db.VarChar(255)
-    cat_abreviatura    String  @db.VarChar(255)
-    cat_valor          Decimal
+    cat_categoria      Int    @id
+    cat_descricao      String @db.VarChar(255)
+    cat_abreviatura    String @db.VarChar(255)
+    cat_valor          Int
     cat_diavencimento  Int?
-    cat_emitirboleto   String  @default("N") @db.VarChar(1)
-    cat_gerardebito    String  @default("N") @db.VarChar(1)
-    cat_gerarjaneiro   String  @default("N") @db.VarChar(1)
-    cat_gerarfevereiro String  @default("N") @db.VarChar(1)
-    cat_gerarmarco     String  @default("N") @db.VarChar(1)
-    cat_gerarabril     String  @default("N") @db.VarChar(1)
-    cat_gerarmaio      String  @default("N") @db.VarChar(1)
-    cat_gerarjunho     String  @default("N") @db.VarChar(1)
-    cat_gerarjulho     String  @default("N") @db.VarChar(1)
-    cat_geraragosto    String  @default("N") @db.VarChar(1)
-    cat_gerarsetembro  String  @default("N") @db.VarChar(1)
-    cat_geraroutubro   String  @default("N") @db.VarChar(1)
-    cat_gerarnovembro  String  @default("N") @db.VarChar(1)
-    cat_gerardezembro  String  @default("N") @db.VarChar(1)
+    cat_emitirboleto   String @default("N") @db.VarChar(1)
+    cat_gerardebito    String @default("N") @db.VarChar(1)
+    cat_gerarjaneiro   String @default("N") @db.VarChar(1)
+    cat_gerarfevereiro String @default("N") @db.VarChar(1)
+    cat_gerarmarco     String @default("N") @db.VarChar(1)
+    cat_gerarabril     String @default("N") @db.VarChar(1)
+    cat_gerarmaio      String @default("N") @db.VarChar(1)
+    cat_gerarjunho     String @default("N") @db.VarChar(1)
+    cat_gerarjulho     String @default("N") @db.VarChar(1)
+    cat_geraragosto    String @default("N") @db.VarChar(1)
+    cat_gerarsetembro  String @default("N") @db.VarChar(1)
+    cat_geraroutubro   String @default("N") @db.VarChar(1)
+    cat_gerarnovembro  String @default("N") @db.VarChar(1)
+    cat_gerardezembro  String @default("N") @db.VarChar(1)
 }
 
 model VW_CHAMADAS {
@@ -186,12 +191,12 @@ model VW_EXTRATO {
     deb_descricao     String
     deb_dtvencimento  DateTime
     deb_dtpagamento   DateTime?
-    deb_vlrparcela    Decimal
-    deb_vlrpagamento  Decimal?
-    deb_vlrdescontos  Decimal?
-    deb_vlrjuros      Decimal?
-    deb_vlrmulta      Decimal?
-    deb_vlracrescimos Decimal?
+    deb_vlrparcela    Int
+    deb_vlrpagamento  Int?
+    deb_vlrdescontos  Int?
+    deb_vlrjuros      Int?
+    deb_vlrmulta      Int?
+    deb_vlracrescimos Int?
 }
 
 model VW_FINALIDADES {
@@ -228,9 +233,9 @@ model VW_LOCACOES {
     loc_nrconvidados   Int
     loc_nrsegurancas   Int
     loc_capacidade     Int
-    loc_vlrAluguel     Decimal
-    loc_vlrAcrescido   Decimal
-    loc_vlrTotal       Decimal
+    loc_vlrAluguel     Int
+    loc_vlrAcrescido   Int
+    loc_vlrTotal       Int
     loc_usuario        String
     loc_idfinalidade   Int
     loc_horainicial    String
@@ -238,7 +243,7 @@ model VW_LOCACOES {
     loc_observacao     String
     loc_geroudeb       String
     loc_situacao       String
-    loc_vlrDesconto    Decimal
+    loc_vlrDesconto    Int
     loc_liberado       String
     loc_dtLiberacao    DateTime
     loc_usuarioliberou String
@@ -250,7 +255,7 @@ model VW_LOCAIS {
     loc_abreviatura      String    @db.VarChar(255)
     loc_idbanco          Int?
     loc_locavel          String    @db.VarChar(1)
-    loc_vlraluguel       Decimal
+    loc_vlraluguel       Int
     loc_idatividade      Int?
     loc_portaria         String    @db.VarChar(1)
     loc_quadra           String    @db.VarChar(1)
@@ -262,8 +267,8 @@ model VW_LOCAIS {
     loc_sede             String    @db.VarChar(1)
     loc_servico          Int?
     loc_capacidade       Int?
-    loc_vlraluguelNsocio Decimal
-    loc_percdesc         Decimal
+    loc_vlraluguelNsocio Int
+    loc_percdesc         Int
     loc_bloqini          DateTime?
     loc_bloqfim          DateTime?
 }
@@ -286,8 +291,8 @@ model VW_PRECOS {
     pre_idprecos    Int             @id @default(autoincrement())
     pre_servico     Int
     pre_vezes       Int
-    pre_valor       Decimal
-    pre_valorNsocio Decimal
+    pre_valor       Int
+    pre_valorNsocio Int
     VW_UTILIZACOES  VW_UTILIZACOES?
 
     @@unique([pre_servico, pre_vezes])
@@ -314,14 +319,14 @@ model VW_RESERVAS_QUADRAS {
     qua_dtreserva       DateTime
     qua_idhorario       Int
     qua_qtetickets      Int
-    qua_vlrquadra       Decimal
-    qua_vlrtotal        Decimal
-    qua_vlriluminacao   Decimal
+    qua_vlrquadra       Int
+    qua_vlrtotal        Int
+    qua_vlriluminacao   Int
     qua_compareceu      String
     qua_cancelada       String
     qua_usuariocancelou String
     qua_gerardebito     String
-    qua_taxailuminacao  Decimal
+    qua_taxailuminacao  Int
     qua_pagtickets      String
     qua_excluido        String
     qua_usuarioexcluiu  String
@@ -380,6 +385,7 @@ model VW_SERVICOS {
     ser_idadeini               Int?
     ser_idadefim               Int?
     ser_permitecontratacao     String          @default("N") @db.VarChar(1)
+    ser_contratasemlimite      String?         @default("N") @db.VarChar(1)
     VW_UTILIZACOES             VW_UTILIZACOES?
 }
 
@@ -404,7 +410,7 @@ model VW_UTILIZACOES {
     uti_usuariocancelou     String
     uti_observacao          String
     uti_isentodebito        String
-    uti_perccons            Decimal
+    uti_perccons            Int
     VW_SERVICOS             VW_SERVICOS?             @relation(fields: [uti_servico], references: [ser_servico], map: "like_servicos")
     VW_PRECOS               VW_PRECOS?               @relation(fields: [uti_servico, uti_vezes], references: [pre_servico, pre_vezes], map: "like_precos")
     VW_UTILIZACOES_HORARIOS VW_UTILIZACOES_HORARIOS? @relation(fields: [uti_idutilizacao], references: [uth_idutilizacao])

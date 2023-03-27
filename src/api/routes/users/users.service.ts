@@ -12,10 +12,7 @@ export class UsersService {
     public age: AgeService,
     private session: SessionModel,
   ) {}
-  async get(params: ParamsInterface, ju = false) {
-    if (ju) {
-      return await this.model.get_ju(params);
-    }
+  async get(params: ParamsInterface) {
     return await this.model.get(params);
   }
 
@@ -28,15 +25,18 @@ export class UsersService {
       });
       const associado = session[0].user.slice(0, 6);
       const sequencia = session[0].user.slice(6, 8);
-      const user = await this.model.get({
+      const user: any = await this.model.get({
         where: {
           id: associado,
           sequency: sequencia,
         },
       });
-      const finalUser: any = user[0];
-      finalUser.age = this.age.getAge(user[0].dtnascimento);
-      return finalUser;
+      if (user[0]) {
+        const finalUser: any = user[0];
+        finalUser.age = this.age.getAge(user[0].dtnascimento);
+        return finalUser;
+      }
+      return [];
     }
   }
 
@@ -54,6 +54,16 @@ export class UsersService {
 
       // Atualiza o udid do usuário
       return await this.model.update(params, { udid });
+    }
+  }
+
+  public fix_precision(value) {
+    if (typeof value == 'number') {
+      return value.toString().length == 1
+        ? '0' + value.toString()
+        : value.toString();
+    } else if (typeof value == 'string') {
+      return value.length == 1 ? '0' + value : value;
     }
   }
 }

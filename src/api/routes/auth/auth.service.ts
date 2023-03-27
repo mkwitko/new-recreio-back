@@ -32,6 +32,7 @@ export class AuthService {
     if (result.length > 1) {
     }
 
+    // Caso não tenha nome ou data de nascimento, atualiza
     await this.validationHelper.check_informations(result[0]);
 
     // Caso exista, verifica a senha e autoriza acesso

@@ -17,4 +17,5 @@ export interface ParamsInterface {
   debug?: boolean;
   notified?: boolean;
   not_notified?: boolean;
+  data?: any;
 }

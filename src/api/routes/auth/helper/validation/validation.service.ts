@@ -1,9 +1,13 @@
+import { AssociadosModelService } from './../../../../ju/associados_ativos/model/model.service';
 import { Injectable } from '@nestjs/common';
 import { UsersModel } from 'src/api/routes/users/model/model.service';
 
 @Injectable()
 export class ValidationService {
-  constructor(private users: UsersModel) {}
+  constructor(
+    private users: UsersModel,
+    private associados: AssociadosModelService,
+  ) {}
   public async check_ezoom(username: string) {
     // Procura o usuário no banco de dados da ezoom
     // Caso tenha mais de usuário, pega o de menor sequência
@@ -20,7 +24,7 @@ export class ValidationService {
 
   public async check_recreio(username: string) {
     // Caso não ache, procura no banco de dados do Recreio da Juventude
-    return await this.users.get_ju({
+    return await this.associados.get({
       where: {
         email: username,
       },
@@ -60,15 +64,15 @@ export class ValidationService {
   }
 
   public async check_informations(user) {
-    if (!user.name || !user.dtNascimento) {
-      const user_ju = await this.users.get_ju({
+    if (!user.name || !user.dtnascimento) {
+      const user_ju = await this.associados.get({
         where: {
           associado: +user.id,
           sequencia: +user.sequency,
         },
       });
       if (user_ju.length > 0) {
-        // Atualizado
+        // Atualizando
         return await this.users.update(
           {
             where: {

@@ -8,8 +8,4 @@ export class ServicesService {
   async get(params: ParamsInterface) {
     return await this.model.get(params);
   }
-
-  async get_ju(params: ParamsInterface) {
-    return await this.model.get_ju(params);
-  }
 }

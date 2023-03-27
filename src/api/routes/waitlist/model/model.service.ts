@@ -1,21 +1,15 @@
-import { PrismaServiceJu } from 'database_core/prisma.service_ju';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'database_core/prisma.service';
 import { QueryClass } from 'src/parents/query/query';
-import { ServicesModel } from '../../services/model/model.service';
 import { ParamsInterface } from '../../../../interfaces/params.interface';
 
 @Injectable()
 export class WaitlistModel extends QueryClass {
-  constructor(
-    protected db: PrismaService,
-    protected judb: PrismaServiceJu,
-    private service: ServicesModel,
-  ) {
-    super();
+  constructor(protected db: PrismaService) {
+    super(db);
   }
 
-  async get(params: ParamsInterface) {
+  override async get(params: ParamsInterface) {
     // // Default Filtering
     // this.filtering(params);
     // // Find

@@ -1,4 +1,4 @@
-import { ReservaServicosModule } from './api/routes/reserva_servicos/reserva_servicos.module';
+import { SlugifyModule } from './services/slugify/slugify.module';
 import { ReservaQuadrasModule } from './api/ju/reserva_quadras/reserva_quadras.module';
 import { UtilizacoesModule } from './api/ju/utilizacoes/utilizacoes.module';
 import { AsyncLocalStorage } from 'async_hooks';
@@ -21,19 +21,22 @@ import { UsersService } from './api/routes/users/users.service';
 import { AgeModule } from './services/age/age.module';
 import { LocationsModule } from './api/routes/locations/locations.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { VacinacaoModule } from './api/routes/vacinacao/vacinacao.module';
 import { RetiradasModule } from './api/ju/retiradas/retiradas.module';
 import { PrecosModule } from './api/ju/precos/precos.module';
+import { ReservaServicosModule } from './api/ju/reserva_servicos/reserva_servicos.module';
+import { VacinacaoModule } from './api/ju/vacinacao/vacinacao.module';
+import { CronModule } from './api/cron/cron.module';
+import { SlugifyService } from './services/slugify/slugify.service';
 
 @Module({
   imports: [
-    //
+    // Generics
     ScheduleModule.forRoot(),
     AlsModule,
     CacheModule.register(),
     PrismaModule,
 
-    //
+    // Ju
     AuthModule,
     LocationsModule,
     PrecosModule,
@@ -42,16 +45,22 @@ import { PrecosModule } from './api/ju/precos/precos.module';
     RetiradasModule,
     ServicesModule,
     SessionModule,
-    UsersModule,
     UtilizacoesModule,
     VacinacaoModule,
+
+    // Ezoom
+    UsersModule,
     WaitlistModule,
 
-    //
+    // Helpers
     AgeModule,
+    SlugifyModule,
+
+    // Cron
+    CronModule,
   ],
   controllers: [],
-  providers: [CacheService],
+  providers: [CacheService, SlugifyService],
 })
 export class AppModule implements NestModule {
   constructor(
@@ -66,20 +75,21 @@ export class AppModule implements NestModule {
       .apply(async (req, res, next) => {
         const user = await this.user.get_by_session(req.headers['session-id']);
         let dependents = [];
-        if (user.sequency == '00') {
-          dependents = await this.user.get(
-            {
-              where: {
-                associado: +user.id,
-                NOT: {
-                  sequencia: 0,
-                },
+        if (user && user.sequency == '00') {
+          dependents = await this.user.get({
+            where: {
+              id: user.id,
+              status: 1,
+              NOT: {
+                sequency: '00',
               },
             },
-            true,
-          );
+          });
           dependents.map((e) => {
-            e.age = this.user.age.getAge(e.dtnascimento);
+            if (e && e.dtnascimento) {
+              const age = this.user.age.getAge(e.dtnascimento);
+              e.age = age ? age : null;
+            }
           });
         }
 
@@ -87,6 +97,7 @@ export class AppModule implements NestModule {
           user,
           dependents,
         };
+
         this.als.run(store, () => next());
       })
       .exclude({ path: 'auth/login', method: RequestMethod.POST })
