@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { UsersService } from './users/users.service';
 import { Module } from '@nestjs/common';
 import { ClassificationModule } from './classifications/services.module';
@@ -23,6 +24,7 @@ import { AlsModule } from 'src/services/local-context/als.module';
     PrismaModule,
     AlsModule,
     AgeModule,
+    AuthModule,
   ],
   providers: [UsersService],
   exports: [UsersService],
