@@ -33,10 +33,12 @@ import { UsersService } from './api/routes/users/users.service';
 
 // ALS
 import { AsyncLocalStorage } from 'async_hooks';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     // Generics
+    ConfigModule.forRoot(), // Importante o config module estar como primeiro
     ScheduleModule.forRoot(),
     AlsModule,
     CacheModule.register(),
