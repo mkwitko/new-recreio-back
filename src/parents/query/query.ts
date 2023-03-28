@@ -29,53 +29,6 @@ export class QueryClass {
     );
   }
 
-  private fix_precision(filter) {
-    Object.keys(filter).forEach((filterKey) => {
-      if (typeof filter[filterKey] == 'object' && filter[filterKey] != null) {
-        Object.keys(filter[filterKey]).forEach((key) => {
-          if (
-            this.stringifyFields.includes(key) &&
-            typeof filter[filterKey][key] != 'string'
-          ) {
-            filter[filterKey][key] = filter[filterKey][key].toString();
-          }
-          if (
-            this.numberFields.includes(key) &&
-            typeof filter[filterKey][key] != 'number'
-          ) {
-            filter[filterKey][key] = +filter[filterKey][key];
-          }
-          if (
-            this.zeroInFrontFields.includes(key) &&
-            filter[filterKey][key].length == 1
-          ) {
-            filter[filterKey][key] = '0' + filter[filterKey][key];
-          }
-        });
-      } else {
-        if (
-          this.stringifyFields.includes(filterKey) &&
-          typeof filter[filterKey] != 'string'
-        ) {
-          filter[filterKey] = filter[filterKey].toString();
-        }
-        if (
-          this.numberFields.includes(filterKey) &&
-          typeof filter[filterKey] != 'number'
-        ) {
-          filter[filterKey] = +filter[filterKey];
-        }
-        if (
-          this.zeroInFrontFields.includes(filterKey) &&
-          filter[filterKey].length == 1
-        ) {
-          filter[filterKey] = '0' + filter[filterKey];
-        }
-      }
-    });
-    return filter;
-  }
-
   private filtering(params) {
     this.filter = {};
     if (params.count) {
@@ -98,7 +51,7 @@ export class QueryClass {
     this.where(params);
     this.group_by(params);
     this.filter = this.fix_precision(this.filter);
-    return this.fix_precision(this.filter);
+    return this.filter;
   }
 
   protected count(params) {
@@ -143,5 +96,39 @@ export class QueryClass {
     if (params.group_by) {
       this.filter.groupBy = params.group_by;
     }
+  }
+
+  private isObject(obj) {
+    return typeof obj == 'object' && obj != null;
+  }
+
+  private fix_precision(filter) {
+    Object.keys(filter).forEach((key) => {
+      this.mapping(key, filter[key], filter);
+    });
+    return filter;
+  }
+
+  private mapping(key, values, filter, oldValue?) {
+    if (this.isObject(values)) {
+      Object.keys(values).forEach((key) => {
+        this.mapping(key, values[key], filter, values);
+      });
+    } else {
+      this.pipe(key, values, oldValue);
+    }
+  }
+
+  private pipe(key, value, oldValue) {
+    if (this.stringifyFields.includes(key) && typeof value != 'string') {
+      value = value.toString();
+    }
+    if (this.numberFields.includes(key) && typeof value != 'number') {
+      value = +value;
+    }
+    if (this.zeroInFrontFields.includes(key) && value.length == 1) {
+      value = '0' + value;
+    }
+    return (oldValue[key] = value);
   }
 }

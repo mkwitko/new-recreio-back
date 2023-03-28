@@ -13,26 +13,15 @@ export class UsersCronModelService extends CronModelClass {
     Object.assign(this.custom, (this.custom.insert = false));
   }
 
-  /* 
-  Caso seja necessário mudar os campos de busca
-  referentes à interação com o banco de dados da Ezoom
-  */
-
-  //   protected override getQuery(each) {
-  //     return {
-  //       where: {
-  //         id: each.associado,
-  //         sequency: each.sequencia,
-  //       },
-  //     };
-  //   }
-
-  //   protected override updateQuery(each) {
-  //     return {
-  //       where: {
-  //         id: each.associado,
-  //         sequency: each.sequencia,
-  //       },
-  //     };
-  //   }
+  protected override updateQuery(each, data) {
+    return {
+      where: {
+        id_sequency: {
+          id: each.associado,
+          sequency: each.sequencia,
+        },
+      },
+      data,
+    };
+  }
 }

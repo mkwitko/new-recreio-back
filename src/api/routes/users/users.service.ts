@@ -1,3 +1,4 @@
+import { ServService } from './../../../parents/routes/serv/serv.service';
 import { UsersModel } from './model/model.service';
 import { ParamsInterface } from './../../../interfaces/params.interface';
 import { Injectable } from '@nestjs/common';
@@ -5,15 +6,14 @@ import { SessionModel } from '../session/model/model.service';
 import { AgeService } from 'src/services/age/age.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends ServService {
   public user;
   constructor(
     public model: UsersModel,
     public age: AgeService,
     private session: SessionModel,
-  ) {}
-  async get(params: ParamsInterface) {
-    return await this.model.get(params);
+  ) {
+    super(model);
   }
 
   async get_by_session(session_id) {
@@ -54,16 +54,6 @@ export class UsersService {
 
       // Atualiza o udid do usuário
       return await this.model.update(params, { udid });
-    }
-  }
-
-  public fix_precision(value) {
-    if (typeof value == 'number') {
-      return value.toString().length == 1
-        ? '0' + value.toString()
-        : value.toString();
-    } else if (typeof value == 'string') {
-      return value.length == 1 ? '0' + value : value;
     }
   }
 }

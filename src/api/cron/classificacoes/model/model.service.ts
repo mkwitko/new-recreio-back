@@ -12,7 +12,15 @@ export class ClassificacoesServiceCronModelService extends CronModelClass {
     super(ezoom, ju);
   }
 
-  protected override updateQuery(each, data): any {
+  protected override getQuery(each) {
+    return {
+      where: {
+        cla_classificacao: each.cla_classificacao,
+      },
+    };
+  }
+
+  protected override updateQuery(each, data) {
     return {
       where: {
         cla_classificacao: each.cla_classificacao,

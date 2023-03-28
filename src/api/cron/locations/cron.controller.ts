@@ -16,34 +16,43 @@ export class LocationsCronController {
   @Get()
   async sync() {
     // Salons
-    this.service.sync({
-      select: this.select,
-      where: {
-        loc_locavel: 'S',
-        loc_quadra: 'N',
-        NOT: {
+    this.service.sync(
+      {
+        select: this.select,
+        where: {
+          loc_locavel: 'S',
+          loc_quadra: 'N',
+          NOT: {
+            loc_servico: 1216,
+          },
+        },
+      },
+      'salons',
+    );
+
+    // Kiosks
+    this.service.sync(
+      {
+        select: this.select,
+        where: {
+          loc_locavel: 'S',
           loc_servico: 1216,
         },
       },
-    });
-
-    // Kiosks
-    this.service.sync({
-      select: this.select,
-      where: {
-        loc_locavel: 'S',
-        loc_servico: 1216,
-      },
-    });
+      'kiosk',
+    );
 
     // Fields
-    this.service.sync({
-      select: this.select,
-      where: {
-        loc_locavel: 'S',
-        loc_quadra: 'S',
-        loc_portaria: 'N',
+    this.service.sync(
+      {
+        select: this.select,
+        where: {
+          loc_locavel: 'S',
+          loc_quadra: 'S',
+          loc_portaria: 'N',
+        },
       },
-    });
+      'fields',
+    );
   }
 }

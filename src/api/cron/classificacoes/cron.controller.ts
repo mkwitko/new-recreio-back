@@ -1,4 +1,3 @@
-import { PrismaService } from 'database_core/prisma.service';
 import { ClassificacoesCronService } from './cron.service';
 import { Controller, Get } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';

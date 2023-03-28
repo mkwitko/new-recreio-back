@@ -5,11 +5,13 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LocationsCronModelService extends CronModelClass {
+  override table = 'site_place_ju';
   constructor(
     protected readonly ezoom: LocationsService,
     protected readonly ju: LocaisService,
   ) {
     super(ezoom, ju);
+    Object.assign(this.custom, (this.custom.customObj.customInsert = true));
   }
 
   protected override getQuery(each) {

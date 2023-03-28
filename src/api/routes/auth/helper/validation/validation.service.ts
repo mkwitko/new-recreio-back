@@ -45,22 +45,17 @@ export class ValidationService {
   }
 
   public async update_ezoomUser(resultJu, username) {
-    return await this.users.update(
-      {
-        where: {
-          id_sequency: {
-            id: resultJu[0].associado.toString(),
-            sequency:
-              resultJu[0].sequencia.toString().length === 1
-                ? '0' + resultJu[0].sequencia.toString()
-                : resultJu[0].sequencia.toString(),
-          },
+    return await this.users.update({
+      where: {
+        id_sequency: {
+          id: resultJu[0],
+          sequency: resultJu[0].sequencia,
+        },
+        data: {
+          email: username,
         },
       },
-      {
-        email: username,
-      },
-    );
+    });
   }
 
   public async check_informations(user) {
@@ -73,20 +68,18 @@ export class ValidationService {
       });
       if (user_ju.length > 0) {
         // Atualizando
-        return await this.users.update(
-          {
-            where: {
-              id_sequency: {
-                id: user.id,
-                sequency: user.sequency,
-              },
+        return await this.users.update({
+          where: {
+            id_sequency: {
+              id: user.id,
+              sequency: user.sequency,
             },
           },
-          {
+          data: {
             nome: user_ju[0].nome,
             dtnascimento: new Date(user_ju[0].dtnascimento),
           },
-        );
+        });
       }
       // Não está atualizado e não conseguiu atualizar
       return false;

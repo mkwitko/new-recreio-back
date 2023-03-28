@@ -1,13 +1,16 @@
+import { ServService } from './../../../parents/routes/serv/serv.service';
 import { WaitlistModel } from './model/model.service';
 import { Injectable } from '@nestjs/common';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 @Injectable()
-export class WaitlistService {
+export class WaitlistService extends ServService {
   constructor(
-    private model: WaitlistModel,
+    public model: WaitlistModel,
     private readonly als: AsyncLocalStorage<any>,
-  ) {}
+  ) {
+    super(model);
+  }
   //   async list() {
   //     const user = await this.als.getStore().user;
   //     const data = await this.model.get({

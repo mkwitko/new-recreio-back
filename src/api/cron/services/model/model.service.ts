@@ -11,4 +11,21 @@ export class ServicesServiceCronModelService extends CronModelClass {
   ) {
     super(ezoom, ju);
   }
+
+  protected override getQuery(each) {
+    return {
+      where: {
+        ser_servico: each.ser_servico,
+      },
+    };
+  }
+
+  protected override updateQuery(each, data) {
+    return {
+      where: {
+        ser_servico: each.ser_servico,
+      },
+      data,
+    };
+  }
 }

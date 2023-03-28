@@ -3,9 +3,8 @@ import { PrismaService } from 'database_core/prisma.service';
 import { QueryClass } from 'src/parents/query/query';
 
 @Injectable()
-export class ServicesModel extends QueryClass {
-  override numberFields = ['ser_servico', 'ser_classificacao', 'ser_idadeini'];
-  override table = 'app_services_ju';
+export class SocialImageModel extends QueryClass {
+  override table = 'site_social_image';
   constructor(protected db: PrismaService) {
     super(db);
   }

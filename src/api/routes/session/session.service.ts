@@ -1,14 +1,12 @@
+import { ServService } from './../../../parents/routes/serv/serv.service';
 import { SessionModel } from './model/model.service';
 import { Injectable } from '@nestjs/common';
-import { ParamsInterface } from 'src/interfaces/params.interface';
 import { serialize } from 'v8';
 
 @Injectable()
-export class SessionService {
-  constructor(private model: SessionModel) {}
-
-  async get(params: ParamsInterface) {
-    return await this.model.get(params);
+export class SessionService extends ServService {
+  constructor(public model: SessionModel) {
+    super(model);
   }
 
   async set(current_session, user, sessionId, ip) {

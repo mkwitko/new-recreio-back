@@ -195,6 +195,23 @@ model site_place_goal {
     @@index([id_goal], map: "id_goal")
 }
 
+model site_social_image {
+    id        Int      @id @default(autoincrement())
+    associado Int?
+    sequencia Int?
+    name      String   @db.VarChar(255)
+    message   String   @db.Text
+    fileName  String   @db.VarChar(255)
+    likes     Int      @default(0)
+    approved  Int      @default(0) @db.TinyInt
+    reproved  Int      @default(0) @db.TinyInt
+    status    Int      @default(1) @db.TinyInt
+    order_by  Int
+    created   DateTime @default(now()) @db.Timestamp(0)
+    updated   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
+    deleted   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
+}
+
 model app_services_ju {
     ser_servico                Int     @id @unique
     ser_descricao              String? @db.VarChar(255)
