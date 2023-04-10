@@ -32,9 +32,9 @@ model app_faq {
     id_company          Int
     order_by            Int                   @default(0)
     status              Boolean?              @default(false)
-    created             DateTime              @default(now()) @db.Timestamp(0)
-    updated             DateTime?             @db.Timestamp(0)
-    deleted             DateTime?             @db.Timestamp(0)
+    created             DateTime              @default(now()) @db.DateTime(0)
+    updated             DateTime?             @db.DateTime(0)
+    deleted             DateTime?             @db.DateTime(0)
     app_faq_description app_faq_description[]
 
     @@index([id_company], map: "id_company")
@@ -52,6 +52,20 @@ model app_faq_description {
     @@index([id_language], map: "id_language")
 }
 
+model app_forgot {
+    id        Int     @id @default(autoincrement())
+    email     String? @unique @db.VarChar(255)
+    cellphone String? @db.VarChar(11)
+    code      String? @db.VarChar(15)
+    status    Int     @default(1)
+}
+
+model app_headquarters_ju {
+    id     Int    @id @default(autoincrement())
+    title  String @db.VarChar(255)
+    status Int    @default(1)
+}
+
 model app_holiday {
     id          Int       @id @default(autoincrement())
     id_company  Int
@@ -60,12 +74,36 @@ model app_holiday {
     date        DateTime  @db.Date
     order_by    Int       @default(0)
     status      Boolean   @default(true)
-    created     DateTime  @default(now()) @db.Timestamp(0)
-    updated     DateTime? @db.Timestamp(0)
+    created     DateTime  @default(now()) @db.DateTime(0)
+    updated     DateTime? @db.DateTime(0)
 
     @@unique([date, id_language], map: "unique_date")
     @@index([id_company], map: "fk_APP_holiday_company_idx")
     @@index([id_language], map: "fk_APP_holiday_language_idx")
+}
+
+model app_hours_ju {
+    id              Int              @id @default(autoincrement())
+    hor_idhorario   Int
+    hor_servico     Int
+    hor_diadasemana String           @db.VarChar(255)
+    hor_horainicial String           @db.VarChar(10)
+    hor_horafinal   String           @db.VarChar(10)
+    hor_capacidade  Int
+    hor_feriado     String           @default("N") @db.VarChar(1)
+    hor_ativo       String?          @default("S") @db.VarChar(1)
+    app_services_ju app_services_ju? @relation(fields: [hor_servico], references: [ser_servico])
+}
+
+model app_prices_ju {
+    id              Int @id @default(autoincrement())
+    pre_idprecos    Int
+    pre_servico     Int
+    pre_vezes       Int
+    pre_valor       Int
+    pre_valorNsocio Int
+
+    app_services_ju app_services_ju? @relation(fields: [pre_servico], references: [ser_servico])
 }
 
 model app_session {
@@ -73,14 +111,106 @@ model app_session {
     ip_address    String  @default("0") @db.VarChar(45)
     user_agent    String  @db.VarChar(255)
     last_activity Int     @default(0) @db.UnsignedInt
-    user          String? @unique @db.VarChar(8)
+    user          String? @db.VarChar(8)
     user_data     String? @db.Text()
 
     @@index([last_activity], map: "last_activity_idx")
 }
 
+model app_service_category {
+    id         Int       @id @unique @default(autoincrement())
+    id_company Int       @default(1)
+    status     Int?      @default(1)
+    reservable Int?      @default(0)
+    logic      String    @db.VarChar(255)
+    created    DateTime  @default(now()) @db.DateTime(0)
+    updated    DateTime? @db.DateTime(0)
+    deleted    DateTime? @db.DateTime(0)
+
+    app_service_category_description app_service_category_description?
+
+    app_service_category_gallery app_service_category_gallery[]
+
+    app_service_category_ju app_service_category_ju[]
+}
+
+model app_service_category_description {
+    id_service_category  Int                  @id @unique
+    id_language          Int
+    title                String?              @db.VarChar(255)
+    text                 String?              @db.Text
+    terms                String?              @db.Text
+    slug                 String?              @db.VarChar(255)
+    app_service_category app_service_category @relation(fields: [id_service_category], references: [id])
+}
+
+model app_service_category_gallery {
+    id                   Int                   @id @unique @default(autoincrement())
+    id_service_category  Int
+    file                 String?               @db.VarChar(255)
+    subtitle             String?               @db.VarChar(255)
+    order_by             Int                   @default(0)
+    highlighted          Int                   @default(0)
+    created              DateTime              @default(now()) @db.DateTime(0)
+    updated              DateTime?             @db.DateTime(0)
+    deleted              DateTime?             @db.DateTime(0)
+    app_service_category app_service_category? @relation(fields: [id_service_category], references: [id])
+}
+
+model app_service_category_ju {
+    id                  Int @id @default(autoincrement())
+    id_service_category Int
+    id_ju_category      Int @unique
+
+    app_service_category app_service_category? @relation(fields: [id_service_category], references: [id])
+
+    app_services_ju app_services_ju[]
+
+    app_service_classifications_ju                  app_service_classifications_ju? @relation(fields: [app_service_classifications_juCla_classificacao], references: [cla_classificacao])
+    app_service_classifications_juCla_classificacao Int?
+}
+
+model app_service_category_filter {
+    id               Int       @id @default(autoincrement())
+    title            String    @db.VarChar(255)
+    id_headquarters  Int
+    services_related String?   @db.Text
+    status           Int?      @default(1)
+    created          DateTime  @default(now()) @db.DateTime(0)
+    updated          DateTime? @db.DateTime(0)
+    deleted          DateTime? @db.DateTime(0)
+}
+
+model app_services_ju {
+    ser_servico                Int                      @id @unique
+    ser_descricao              String?                  @db.VarChar(255)
+    ser_abreviatura            String?                  @db.VarChar(255)
+    ser_classificacao          Int?
+    ser_bloqatraso             String?                  @default("S") @db.VarChar(1)
+    ser_diasbloqatraso         Int?
+    ser_gerardebito            String?                  @default("S") @db.VarChar(1)
+    ser_permitecontratacao     String?                  @default("S") @db.VarChar(1)
+    ser_ativo                  String?                  @default("S") @db.VarChar(1)
+    ser_considerarparadesconto String?                  @default("S") @db.VarChar(1)
+    ser_idadeini               Int?
+    ser_idadefim               Int?
+    ser_contratasemlimite      String?                  @db.VarChar(255)
+    sexo                       String?                  @db.VarChar(1)
+    app_service_category_ju    app_service_category_ju? @relation(fields: [ser_classificacao], references: [id_ju_category])
+
+    app_hours_ju  app_hours_ju[]
+    app_prices_ju app_prices_ju[]
+}
+
+model app_service_classifications_ju {
+    cla_classificacao       Int                       @id @unique
+    cla_descricao           String?                   @db.VarChar(255)
+    app_service_category_ju app_service_category_ju[]
+}
+
 model app_user {
-    id            String    @id @unique @db.VarChar(8)
+    mainId        Int       @id @default(autoincrement())
+    id            String    @db.VarChar(8)
     sequency      String    @default("00") @db.Char(2)
     password      String    @db.VarChar(255)
     udid          String?   @db.VarChar(255)
@@ -98,6 +228,16 @@ model app_user {
     super         Int?      @default(0)
 
     @@unique([id, sequency])
+}
+
+model app_user_guest {
+    username    String   @id @unique @db.VarChar(255)
+    name        String   @db.VarChar(255)
+    cellphone   String   @db.VarChar(255)
+    motive      String   @db.VarChar(255)
+    password    String   @db.VarChar(255)
+    created     DateTime @default(now()) @db.DateTime(0)
+    valid_until DateTime @default(now()) @db.DateTime(0)
 }
 
 model app_update {
@@ -125,9 +265,9 @@ model site_place {
     type                     String                   @default("place") @db.VarChar(30)
     id_type                  Int
     order_by                 Int
-    created                  DateTime                 @default(now()) @db.Timestamp(0)
-    updated                  DateTime?                @db.Timestamp(0)
-    deleted                  DateTime?                @db.Timestamp(0)
+    created                  DateTime                 @default(now()) @db.DateTime(0)
+    updated                  DateTime?                @db.DateTime(0)
+    deleted                  DateTime?                @db.DateTime(0)
     site_place_ju            site_place_ju?           @relation(fields: [id], references: [loc_local])
     site_place_description   site_place_description[]
     site_place_discount      site_place_discount[]
@@ -171,16 +311,17 @@ model site_place_discount {
 }
 
 model site_place_gallery {
-    id          Int        @id @default(autoincrement())
+    id          Int       @id @default(autoincrement())
     id_place    Int
-    file        String     @db.VarChar(255)
-    subtitle    String?    @db.VarChar(255)
+    file        String    @db.VarChar(255)
+    subtitle    String?   @db.VarChar(255)
     order_by    Int?
-    highlighted Boolean?   @default(false)
-    created     DateTime   @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
-    updated     Int?
-    deleted     Int?
-    site_place  site_place @relation(fields: [id_place], references: [id], onDelete: Cascade, map: "site_place_gallery_ibfk_1")
+    highlighted Boolean?  @default(false)
+    created     DateTime  @default(now()) @db.DateTime(0)
+    updated     DateTime? @db.DateTime(0)
+    deleted     DateTime? @db.DateTime(0)
+
+    site_place site_place @relation(fields: [id_place], references: [id], onDelete: Cascade, map: "site_place_gallery_ibfk_1")
 
     @@index([id_place], map: "id_place")
 }
@@ -196,40 +337,18 @@ model site_place_goal {
 }
 
 model site_social_image {
-    id        Int      @id @default(autoincrement())
+    id        Int       @id @default(autoincrement())
     associado Int?
     sequencia Int?
-    name      String   @db.VarChar(255)
-    message   String   @db.Text
-    fileName  String   @db.VarChar(255)
-    likes     Int      @default(0)
-    approved  Int      @default(0) @db.TinyInt
-    reproved  Int      @default(0) @db.TinyInt
-    status    Int      @default(1) @db.TinyInt
+    name      String    @db.VarChar(255)
+    message   String    @db.Text
+    fileName  String    @db.VarChar(255)
+    likes     Int       @default(0)
+    approved  Int       @default(0) @db.TinyInt
+    reproved  Int       @default(0) @db.TinyInt
+    status    Int       @default(1) @db.TinyInt
     order_by  Int
-    created   DateTime @default(now()) @db.Timestamp(0)
-    updated   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
-    deleted   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.Timestamp(0)
-}
-
-model app_services_ju {
-    ser_servico                Int     @id @unique
-    ser_descricao              String? @db.VarChar(255)
-    ser_abreviatura            String? @db.VarChar(255)
-    ser_classificacao          Int?
-    ser_bloqatraso             String? @default("S") @db.VarChar(1)
-    ser_diasbloqatraso         Int?
-    ser_gerardebito            String? @default("S") @db.VarChar(1)
-    ser_permitecontratacao     String? @default("S") @db.VarChar(1)
-    ser_ativo                  String? @default("S") @db.VarChar(1)
-    ser_considerarparadesconto String? @default("S") @db.VarChar(1)
-    ser_idadeini               Int?
-    ser_idadefim               Int?
-    ser_contratasemlimite      String? @db.VarChar(255)
-    sexo                       String? @db.VarChar(1)
-}
-
-model app_service_classifications_ju {
-    cla_classificacao Int     @id @unique
-    cla_descricao     String? @db.VarChar(255)
+    created   DateTime  @default(now()) @db.DateTime(0)
+    updated   DateTime? @db.DateTime(0)
+    deleted   DateTime? @db.DateTime(0)
 }

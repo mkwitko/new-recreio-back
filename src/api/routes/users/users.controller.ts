@@ -14,8 +14,14 @@ export class UsersController extends ControlController {
 
   @Get('dependents')
   async dependents() {
+    const dependents = await this.local.get('dependents');
+    if (dependents)
+      return {
+        status: true,
+        data: dependents,
+      };
     const user = await this.local.get('user');
-    return this.usersService.get({
+    const result = await this.usersService.get({
       where: {
         id: user.id,
         NOT: {
@@ -23,5 +29,9 @@ export class UsersController extends ControlController {
         },
       },
     });
+    return {
+      status: result.length > 0,
+      data: result,
+    };
   }
 }

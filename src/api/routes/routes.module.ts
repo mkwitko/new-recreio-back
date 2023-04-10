@@ -1,7 +1,9 @@
+import { EmailModule } from '../../services/email/email.module';
+import { PaymentModule } from './payments/payment.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersService } from './users/users.service';
 import { Module } from '@nestjs/common';
-import { ClassificationModule } from './classifications/services.module';
+import { ClassificationModule } from './classifications/classifications.module';
 import { LocationsModule } from './locations/locations.module';
 import { ServicesModule } from './services/services.module';
 import { SessionModule } from './session/session.module';
@@ -11,6 +13,11 @@ import { WaitlistModule } from './waitlist/waitlist.module';
 import { PrismaModule } from 'src/shared_module/prisma/prisma.module';
 import { AgeModule } from 'src/services/age/age.module';
 import { AlsModule } from 'src/services/local-context/als.module';
+import { SmsModule } from '../../services/sms/sms.module';
+import { ClassificationFilterModule } from './classifications_filter/classifications_filter.module';
+import { HeadquartersModule } from './headquarters/headquarters.module';
+import { PricesModule } from './prices/prices.module';
+import { HoursModule } from './Hours/Hours.module';
 
 @Module({
   imports: [
@@ -25,6 +32,13 @@ import { AlsModule } from 'src/services/local-context/als.module';
     AlsModule,
     AgeModule,
     AuthModule,
+    PaymentModule,
+    SmsModule,
+    EmailModule,
+    ClassificationFilterModule,
+    HeadquartersModule,
+    PricesModule,
+    HoursModule,
   ],
   providers: [UsersService],
   exports: [UsersService],

@@ -7,4 +7,13 @@ export class ServicesController extends ControlController {
   constructor(public servicesService: ServicesService) {
     super(servicesService);
   }
+
+  override include() {
+    return {
+      include: {
+        app_prices_ju: true,
+        app_hours_ju: true,
+      },
+    };
+  }
 }

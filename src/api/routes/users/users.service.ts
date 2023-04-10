@@ -2,8 +2,8 @@ import { ServService } from './../../../parents/routes/serv/serv.service';
 import { UsersModel } from './model/model.service';
 import { ParamsInterface } from './../../../interfaces/params.interface';
 import { Injectable } from '@nestjs/common';
-import { SessionModel } from '../session/model/model.service';
 import { AgeService } from 'src/services/age/age.service';
+import { SessionService } from '../session/session.service';
 
 @Injectable()
 export class UsersService extends ServService {
@@ -11,9 +11,19 @@ export class UsersService extends ServService {
   constructor(
     public model: UsersModel,
     public age: AgeService,
-    private session: SessionModel,
+    private session: SessionService,
   ) {
     super(model);
+  }
+
+  async getSession(user: any, sessionId: string, ip: string) {
+    const session = await this.session.get({
+      where: {
+        user: user.id + user.sequency,
+      },
+    });
+    await this.session.set(session, user, sessionId, ip);
+    return session;
   }
 
   async get_by_session(session_id) {

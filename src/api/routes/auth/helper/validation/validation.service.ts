@@ -1,20 +1,30 @@
+import { TypeValidationService } from './../../../../../services/type-validation/type-validation.service';
 import { AssociadosModelService } from './../../../../ju/associados_ativos/model/model.service';
 import { Injectable } from '@nestjs/common';
 import { UsersModel } from 'src/api/routes/users/model/model.service';
+import { CellphoneService } from './cellphone/cellphone.service';
 
 @Injectable()
 export class ValidationService {
   constructor(
+    public cellphone: CellphoneService,
     private users: UsersModel,
     private associados: AssociadosModelService,
+    private typeValidation: TypeValidationService,
   ) {}
+
   public async check_ezoom(username: string) {
     // Procura o usuário no banco de dados da ezoom
     // Caso tenha mais de usuário, pega o de menor sequência
+
+    let where = {};
+
+    if (this.typeValidation.validEmail(username)) where = { email: username };
+    else if (this.typeValidation.validCpf(username)) where = { cpf: username };
+    else return false;
+
     const user = await this.users.get({
-      where: {
-        email: username,
-      },
+      where,
       order_by: {
         sequency: 'asc',
       },

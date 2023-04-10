@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LocalContextService } from './../../../services/local-context/local-context.service';
 import { LocationModel } from './model/model.service';
 import { Injectable } from '@nestjs/common';
@@ -19,8 +20,22 @@ export class LocationsService extends ServService {
     const dependents = await this.local.get('dependents');
     const all = [user, ...dependents];
     // return all;
-    return await all.map((e) => {
-      e.locations = [];
+    return all.map((e) => {
+      const {
+        cpf,
+        created,
+        deleted,
+        dtNascimento,
+        email,
+        identidade,
+        password,
+        retrieve_hash,
+        udid,
+        updated,
+        status,
+        ...user
+      } = e;
+      user.locations = [];
       location.map((each: any) => {
         if (each.site_place_ju) {
           if (
@@ -29,7 +44,7 @@ export class LocationsService extends ServService {
             (each.site_place_ju.loc_idadeinicial <= e.age &&
               each.site_place_ju.loc_idadefinal >= e.age)
           ) {
-            e.locations.push(each);
+            user.locations.push(each);
           }
         } else {
           if (
@@ -37,11 +52,11 @@ export class LocationsService extends ServService {
             each.loc_idadefinal == null ||
             (each.loc_idadeinicial <= e.age && each.loc_idadefinal >= e.age)
           ) {
-            e.locations.push(each);
+            user.locations.push(each);
           }
         }
       });
-      return e;
+      return user;
     });
   }
 }

@@ -25,21 +25,24 @@ export class UsersCronController {
   @Get()
   async sync() {
     return await this.service.sync({
-      select: {
-        // Identificadores
-        associado: true,
-        sequencia: true,
+      //   select: {
+      //     // Identificadores
+      //     associado: true,
+      //     sequencia: true,
 
-        // Campos de atualização
-        nome: true,
-        email: true,
-        dtnascimento: true,
-        cpf: true,
-        identidade: true,
-        sexo: true,
-      },
+      //     // Campos de atualização
+      //     nome: true,
+      //     email: true,
+      //     dtnascimento: true,
+      //     cpf: true,
+      //     identidade: true,
+      //     sexo: true,
+      //   },
       where: {
         associado: 224107,
+      },
+      include: {
+        VW_ASSOCIADOS_TELEFONES: true,
       },
     });
   }

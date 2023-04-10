@@ -14,7 +14,9 @@ export class QueryClass {
   }
 
   async insert(data, table = null): Promise<any> {
-    return await this.db[table ? table : this.table].create({ data });
+    return await this.db[table ? table : this.table].create(
+      this.filtering({ data }),
+    );
   }
 
   async update(params, table = null): Promise<any> {
@@ -24,7 +26,7 @@ export class QueryClass {
   }
 
   async delete(params, table = null): Promise<any> {
-    return await this.db[table ? table : this.table].update(
+    return await this.db[table ? table : this.table].delete(
       this.filtering(params),
     );
   }
@@ -120,14 +122,16 @@ export class QueryClass {
   }
 
   private pipe(key, value, oldValue) {
-    if (this.stringifyFields.includes(key) && typeof value != 'string') {
-      value = value.toString();
-    }
-    if (this.numberFields.includes(key) && typeof value != 'number') {
-      value = +value;
-    }
-    if (this.zeroInFrontFields.includes(key) && value.length == 1) {
-      value = '0' + value;
+    if (value != null) {
+      if (this.stringifyFields.includes(key) && typeof value != 'string') {
+        value = value.toString().trim();
+      }
+      if (this.numberFields.includes(key) && typeof value != 'number') {
+        value = +value;
+      }
+      if (this.zeroInFrontFields.includes(key) && value.length == 1) {
+        value = '0' + value;
+      }
     }
     return (oldValue[key] = value);
   }

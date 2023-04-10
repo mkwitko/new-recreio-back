@@ -47,13 +47,13 @@ model VW_ASSOCIADOS_ATIVOS {
 }
 
 model VW_ASSOCIADOS_TELEFONES {
-    tel_idtelefone Int     @id @default(autoincrement())
+    tel_idtelefone Int    @id @default(autoincrement())
     tel_associado  Int
     tel_sequencia  Int
-    tel_tipo       String  @db.VarChar(255)
-    tel_ddd        String  @db.VarChar(2)
-    tel_numero     String  @db.VarChar(9)
-    tel_ramal      String? @db.VarChar(4)
+    tel_tipo       String @db.VarChar(255)
+    tel_ddd        String @db.VarChar(2)
+    tel_numero     String @db.VarChar(9)
+    tel_ramal      Int?
 
     VW_ASSOCIADOS_ATIVOS VW_ASSOCIADOS_ATIVOS? @relation(fields: [tel_associado, tel_sequencia], references: [associado, sequencia])
 }
@@ -209,14 +209,14 @@ model VW_FINALIDADES {
 }
 
 model VW_HORARIOS {
-    hor_idhorario   Int    @id
+    hor_idhorario   Int     @id
     hor_servico     Int
-    hor_diadasemana Int
+    hor_diadasemana String
     hor_horainicial String
     hor_horafinal   String
     hor_capacidade  Int
     hor_feriado     String
-    hor_ativo       String
+    hor_ativo       String?
 }
 
 model VW_LOCACOES {

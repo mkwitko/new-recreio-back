@@ -31,18 +31,32 @@ import { SlugifyService } from './services/slugify/slugify.service';
 // User
 import { UsersService } from './api/routes/users/users.service';
 
-// ALS
-import { AsyncLocalStorage } from 'async_hooks';
+// Config
 import { ConfigModule } from '@nestjs/config';
+
+// Configuration
+import configuration from './config/configuration';
+
+// Axios
+import { HttpModule } from '@nestjs/axios';
+import { PagarmeModule } from './services/pagarme/pagarme.module';
+import { TypeValidationModule } from './services/type-validation/type-validation.module';
+
+import { storage } from './services/local-context/local-context.service';
+import { EncryptModule } from './services/encrypt/encrypt.module';
 
 @Module({
   imports: [
     // Generics
-    ConfigModule.forRoot(), // Importante o config module estar como primeiro
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }), // Importante o config module estar como primeiro
     ScheduleModule.forRoot(),
     AlsModule,
     CacheModule.register(),
     PrismaModule,
+    HttpModule,
 
     // Ju
     JuModule,
@@ -56,14 +70,17 @@ import { ConfigModule } from '@nestjs/config';
 
     // Cron
     CronModule,
+
+    PagarmeModule,
+
+    TypeValidationModule,
+
+    EncryptModule,
   ],
   providers: [CacheService, SlugifyService],
 })
 export class AppModule implements NestModule {
-  constructor(
-    private readonly als: AsyncLocalStorage<any>,
-    private user: UsersService,
-  ) {}
+  constructor(private user: UsersService) {}
 
   count = 0;
   configure(consumer: MiddlewareConsumer) {
@@ -87,15 +104,17 @@ export class AppModule implements NestModule {
             }
           });
         }
-
         const store = {
           user,
           dependents,
         };
-
-        this.als.run(store, () => next());
+        storage.run(store, () => next());
       })
-      .exclude({ path: 'auth/login', method: RequestMethod.POST })
+      .exclude(
+        { path: 'auth/verify', method: RequestMethod.POST },
+        { path: 'auth/login', method: RequestMethod.POST },
+        { path: 'auth/forgot', method: RequestMethod.POST },
+      )
       .forRoutes('*');
   }
 }

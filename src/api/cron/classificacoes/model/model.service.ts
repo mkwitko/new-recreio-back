@@ -1,7 +1,7 @@
 import { CronModelClass } from '../../../../parents/cron/cron_model';
 import { Injectable } from '@nestjs/common';
 import { ClassificacoesService } from 'src/api/ju/classificacoes/classificacoes.service';
-import { ClassificationService } from 'src/api/routes/classifications/services.service';
+import { ClassificationService } from 'src/api/routes/classifications/classifications.service';
 
 @Injectable()
 export class ClassificacoesServiceCronModelService extends CronModelClass {

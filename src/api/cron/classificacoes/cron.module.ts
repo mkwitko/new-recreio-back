@@ -3,7 +3,7 @@ import { ClassificacoesServiceCronModelService } from './model/model.service';
 import { ClassificacoesCronService } from './cron.service';
 import { ClassificacoesCronController } from './cron.controller';
 import { Module } from '@nestjs/common';
-import { ClassificationModule } from 'src/api/routes/classifications/services.module';
+import { ClassificationModule } from 'src/api/routes/classifications/classifications.module';
 import { ClassificacoesModule } from 'src/api/ju/classificacoes/classificacoes.module';
 
 @Module({
