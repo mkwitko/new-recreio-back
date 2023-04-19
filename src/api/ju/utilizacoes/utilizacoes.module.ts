@@ -3,9 +3,12 @@ import { PrismaModule } from 'src/shared_module/prisma/prisma.module';
 import { UtilizacoesService } from './utilizacoes.service';
 import { UtilizacoesModelService } from './model/model.service';
 import { Module } from '@nestjs/common';
+import { UtilizacoesController } from './utilizacoes.controller';
+import { AgeModule } from 'src/services/age/age.module';
 
 @Module({
-  imports: [PrismaModule, AlsModule],
+  imports: [PrismaModule, AlsModule, AgeModule],
+  controllers: [UtilizacoesController],
   providers: [UtilizacoesService, UtilizacoesModelService],
   exports: [UtilizacoesService, UtilizacoesModelService],
 })

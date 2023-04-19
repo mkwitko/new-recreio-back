@@ -17,6 +17,7 @@ import { RetiradasModule } from './retiradas/retiradas.module';
 import { ServicosModule } from './servicos/servicos.module';
 import { UtilizacoesModule } from './utilizacoes/utilizacoes.module';
 import { VacinacaoModule } from './vacinacao/vacinacao.module';
+import { UtilizacoesHorariosModule } from './utilizacoes_horarios/utilizacoes_horarios.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { VacinacaoModule } from './vacinacao/vacinacao.module';
     ServicosModule,
     UtilizacoesModule,
     VacinacaoModule,
+    UtilizacoesHorariosModule,
   ],
 })
 export class JuModule {}

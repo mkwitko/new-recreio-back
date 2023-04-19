@@ -394,34 +394,36 @@ model VW_USUARIOS {
 }
 
 model VW_UTILIZACOES {
-    uti_idutilizacao        Int                      @id @unique @default(autoincrement())
+    id                      Int                       @id @unique
+    uti_idutilizacao        Int?                      @unique
     uti_associado           Int
     uti_sequencia           Int
-    uti_servico             Int                      @unique
-    uti_modalidade          Int
-    uti_vezes               Int
-    uti_dtlancamento        DateTime
+    uti_servico             Int?                      @unique @default(0)
+    uti_modalidade          Int?
+    uti_vezes               Int?                      @default(1)
+    uti_dtlancamento        DateTime                  @default(now())
     uti_ativo               String
-    uti_dtinicial           DateTime
-    uti_dtfinal             DateTime
-    uti_cancelado           String
-    uti_motivo              String
-    uti_dtcancelamento      DateTime
-    uti_usuariocancelou     String
-    uti_observacao          String
-    uti_isentodebito        String
-    uti_perccons            Int
-    VW_SERVICOS             VW_SERVICOS?             @relation(fields: [uti_servico], references: [ser_servico], map: "like_servicos")
-    VW_PRECOS               VW_PRECOS?               @relation(fields: [uti_servico, uti_vezes], references: [pre_servico, pre_vezes], map: "like_precos")
-    VW_UTILIZACOES_HORARIOS VW_UTILIZACOES_HORARIOS? @relation(fields: [uti_idutilizacao], references: [uth_idutilizacao])
+    uti_dtinicial           DateTime?                 @default(now())
+    uti_dtfinal             DateTime?
+    uti_cancelado           String?
+    uti_motivo              Int?
+    uti_dtcancelamento      DateTime?
+    uti_usuariocancelou     String?
+    uti_observacao          String?
+    uti_isentodebito        String?
+    uti_perccons            Int?
+    VW_SERVICOS             VW_SERVICOS?              @relation(fields: [uti_servico], references: [ser_servico], map: "like_servicos")
+    VW_PRECOS               VW_PRECOS?                @relation(fields: [uti_servico, uti_vezes], references: [pre_servico, pre_vezes], map: "like_precos")
+    VW_UTILIZACOES_HORARIOS VW_UTILIZACOES_HORARIOS[]
 
     @@unique([uti_servico, uti_vezes], name: "relation_price")
 }
 
 model VW_UTILIZACOES_HORARIOS {
-    uth_idutilizacaohorario Int              @id @default(autoincrement())
-    uth_idutilizacao        Int              @unique
-    VW_UTILIZACOES          VW_UTILIZACOES[]
+    uth_idutilizacaohorario Int             @id @default(autoincrement())
+    uth_idutilizacao        Int             @unique
+    uth_idhorario           Int             @unique
+    VW_UTILIZACOES          VW_UTILIZACOES? @relation(fields: [uth_idutilizacao], references: [uti_idutilizacao])
 }
 
 model VW_VACINACAO {

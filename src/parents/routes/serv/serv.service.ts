@@ -7,4 +7,8 @@ export class ServService {
   async get(params: ParamsInterface) {
     return await this.model.get(params);
   }
+
+  async create(data) {
+    return await this.model.insert(data);
+  }
 }

@@ -3,6 +3,7 @@ export class QueryClass {
   stringifyFields = [];
   zeroInFrontFields = [];
   numberFields = [];
+  arrayNumberfy = false;
   protected filter: any = {};
 
   constructor(protected db: any) {}
@@ -126,8 +127,12 @@ export class QueryClass {
       if (this.stringifyFields.includes(key) && typeof value != 'string') {
         value = value.toString().trim();
       }
-      if (this.numberFields.includes(key) && typeof value != 'number') {
-        value = +value;
+      if (typeof value != 'number') {
+        if (
+          this.numberFields.includes(key) ||
+          (/^\d+$/.test(key) && this.arrayNumberfy)
+        )
+          value = +value;
       }
       if (this.zeroInFrontFields.includes(key) && value.length == 1) {
         value = '0' + value;

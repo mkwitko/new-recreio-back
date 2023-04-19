@@ -1,12 +1,10 @@
 import { UtilizacoesModelService } from './model/model.service';
 import { Injectable } from '@nestjs/common';
-import { ParamsInterface } from 'src/interfaces/params.interface';
+import { ServService } from 'src/parents/routes/serv/serv.service';
 
 @Injectable()
-export class UtilizacoesService {
-  constructor(private model: UtilizacoesModelService) {}
-
-  async get(params: ParamsInterface) {
-    return await this.model.get(params);
+export class UtilizacoesService extends ServService {
+  constructor(public model: UtilizacoesModelService) {
+    super(model);
   }
 }
