@@ -1,4 +1,4 @@
-import { CronParamsInterface } from 'src/interfaces/Cronparams.interface';
+import { CronParamsInterface } from 'src/interfaces/CronParams.interface';
 import { ParamsInterface } from 'src/interfaces/params.interface';
 
 export class CronModelClass {
