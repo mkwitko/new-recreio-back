@@ -64,15 +64,15 @@ model VW_BOLETOS {
     ass_digito              Int       @default(1)
     ass_nome                String
     ass_cpf                 String    @db.VarChar(15)
-    ass_tipoidentidade      String
-    ass_identidade          String
+    ass_tipoidentidade      String?
+    ass_identidade          String?
     ass_cep                 String
     ass_endereco            String
     ass_numero              Int
-    ass_complemento         String
-    ass_bairro              String
-    ass_municipio           String
-    ass_uf                  String
+    ass_complemento         String?
+    ass_bairro              String?
+    ass_municipio           String?
+    ass_uf                  String?
     ass_cepcobranca         String?
     ass_enderecocobranca    String?
     ass_numerocobranca      String?
@@ -86,27 +86,27 @@ model VW_BOLETOS {
     cat_descricao           String
     deb_codcontr            Int
     deb_sequencia           Int
-    ser_servico             String
+    ser_servico             Int?
     ser_descricao           String
     deb_dtreferencia        DateTime
     deb_dtvencimento        DateTime
     deb_dtpagamento         DateTime?
     deb_descricao           String
-    deb_vlrparcela          String
-    deb_vlrpagamento        String
+    deb_vlrparcela          Int?
+    deb_vlrpagamento        Int?
     deb_nossonumero         String?
-    deb_dtinicial           String?
-    deb_dtfinal             String?
+    deb_dtinicial           DateTime?
+    deb_dtfinal             DateTime?
     deb_dtgeracaoboleto     String?
-    deb_seqrem              String?
-    deb_vlrdescontos        String
-    par_percjurosdiarios    String
-    par_percmulta           String
-    par_diasmulta           String
-    par_vljuros             String
-    par_vlmulta             String
-    par_valortotal          String
-    bar_codcontr            String?
+    deb_seqrem              Int?
+    deb_vlrdescontos        Int?
+    par_percjurosdiarios    Decimal
+    par_percmulta           Int
+    par_diasmulta           Int
+    par_vljuros             Int?
+    par_vlmulta             Int?
+    par_valortotal          Decimal
+    bar_codcontr            Int?
     bar_codbarra            String?
     bar_linhadigitavel      String?
 }
@@ -209,14 +209,15 @@ model VW_FINALIDADES {
 }
 
 model VW_HORARIOS {
-    hor_idhorario   Int     @id
-    hor_servico     Int
-    hor_diadasemana String
-    hor_horainicial String
-    hor_horafinal   String
-    hor_capacidade  Int
-    hor_feriado     String
-    hor_ativo       String?
+    hor_idhorario           Int                       @id
+    hor_servico             Int
+    hor_diadasemana         String
+    hor_horainicial         String
+    hor_horafinal           String
+    hor_capacidade          Int
+    hor_feriado             String
+    hor_ativo               String?
+    VW_UTILIZACOES_HORARIOS VW_UTILIZACOES_HORARIOS[]
 }
 
 model VW_LOCACOES {
@@ -394,10 +395,9 @@ model VW_USUARIOS {
 }
 
 model VW_UTILIZACOES {
-    id                      Int                       @id @unique
-    uti_idutilizacao        Int?                      @unique
-    uti_associado           Int
-    uti_sequencia           Int
+    uti_idutilizacao        Int                       @id @unique
+    uti_associado           String
+    uti_sequencia           String
     uti_servico             Int?                      @unique @default(0)
     uti_modalidade          Int?
     uti_vezes               Int?                      @default(1)
@@ -424,6 +424,7 @@ model VW_UTILIZACOES_HORARIOS {
     uth_idutilizacao        Int             @unique
     uth_idhorario           Int             @unique
     VW_UTILIZACOES          VW_UTILIZACOES? @relation(fields: [uth_idutilizacao], references: [uti_idutilizacao])
+    VW_HORARIOS             VW_HORARIOS?    @relation(fields: [uth_idhorario], references: [hor_idhorario])
 }
 
 model VW_VACINACAO {

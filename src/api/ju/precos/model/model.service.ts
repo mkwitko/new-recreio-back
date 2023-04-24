@@ -5,6 +5,7 @@ import { PrismaServiceJu } from 'database_core/prisma.service_ju';
 @Injectable()
 export class PrecosModelService extends QueryClass {
   override table = 'vW_PRECOS';
+  override numberFields = ['pre_idprecos'];
   constructor(public judb: PrismaServiceJu) {
     super(judb);
   }

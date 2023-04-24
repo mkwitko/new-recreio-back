@@ -18,6 +18,7 @@ import { ClassificationFilterModule } from './classifications_filter/classificat
 import { HeadquartersModule } from './headquarters/headquarters.module';
 import { PricesModule } from './prices/prices.module';
 import { HoursModule } from './Hours/Hours.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { HoursModule } from './Hours/Hours.module';
     HeadquartersModule,
     PricesModule,
     HoursModule,
+    ConfigModule,
   ],
   providers: [UsersService],
   exports: [UsersService],

@@ -20,6 +20,22 @@ export class QueryClass {
     );
   }
 
+  async insertRaw(keys, values, table = null) {
+    return await this.db.$transaction(async (prisma) => {
+      const insert = await prisma.$queryRawUnsafe(`
+       INSERT INTO ${table ? table : this.table} (${keys})
+       VALUES (${values.map((e) => {
+         if (typeof e === 'string') {
+           return `'${e}'`;
+         }
+         return e;
+       })})
+       SELECT @@IDENTITY AS id
+       `);
+      return insert;
+    });
+  }
+
   async update(params, table = null): Promise<any> {
     return await this.db[table ? table : this.table].update(
       this.filtering(params),
@@ -32,7 +48,7 @@ export class QueryClass {
     );
   }
 
-  private filtering(params) {
+  filtering(params) {
     this.filter = {};
     if (params.count) {
       this.filter.count = this.count(params);

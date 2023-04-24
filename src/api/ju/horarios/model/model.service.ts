@@ -5,6 +5,7 @@ import { PrismaServiceJu } from 'database_core/prisma.service_ju';
 @Injectable()
 export class HorariosModelService extends QueryClass {
   override table = 'vW_HORARIOS';
+  override numberFields = ['uti_horarios'];
   constructor(public judb: PrismaServiceJu) {
     super(judb);
   }

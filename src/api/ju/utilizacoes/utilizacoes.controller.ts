@@ -20,7 +20,11 @@ export class UtilizacoesController extends ControlController {
   override include() {
     return {
       include: {
-        VW_UTILIZACOES_HORARIOS: true,
+        VW_UTILIZACOES_HORARIOS: {
+          include: {
+            VW_HORARIOS: true,
+          },
+        },
       },
     };
   }

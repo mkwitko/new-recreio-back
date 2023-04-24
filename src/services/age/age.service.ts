@@ -7,7 +7,9 @@ export class AgeService {
     return moment().diff(date, 'years');
   }
 
-  getDate() {
+  getDate(date?) {
+    if (date)
+      return new Date(date).toISOString().replace(/T/, ' ').replace(/\..+/, '');
     return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
   }
 }

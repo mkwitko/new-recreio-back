@@ -28,7 +28,6 @@ export class ControlController {
     if (Object.entries(this.select()).length > 0) params.select = this.select();
 
     const result = await this.service.get(params);
-    console.log(result);
     return {
       status: Array.isArray(result)
         ? result.length > 0
