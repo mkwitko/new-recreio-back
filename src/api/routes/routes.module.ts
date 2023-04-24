@@ -17,8 +17,8 @@ import { SmsModule } from '../../services/sms/sms.module';
 import { ClassificationFilterModule } from './classifications_filter/classifications_filter.module';
 import { HeadquartersModule } from './headquarters/headquarters.module';
 import { PricesModule } from './prices/prices.module';
-import { HoursModule } from './Hours/Hours.module';
 import { ConfigModule } from '@nestjs/config';
+import { HoursModule } from './hours/hours.module';
 
 @Module({
   imports: [
