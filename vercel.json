@@ -3,8 +3,7 @@
   "builds": [
     {
       "src": "src/main.ts",
-      "use": "@vercel/node",
-      "script": "npx prisma generate --schema prisma_ju/schema.prisma && nest build"
+      "use": "@vercel/node"
     }
   ],
   "routes": [
