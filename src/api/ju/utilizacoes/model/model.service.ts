@@ -55,6 +55,14 @@ export class UtilizacoesModelService extends QueryClass {
       };
     }
 
+    if (data.uti_servico == 1484) {
+      // TODO inserir preferencias ciclismo
+    }
+
+    if (data.uti_logic === 'tenis_m') {
+      //TODO Tenis inserir na reserva de serviços
+    }
+
     // Verifica se o serviço já foi contratado pelo usuário
     const hired_services = await this.findService(data);
     if (hired_services.length > 0) {
